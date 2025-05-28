@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Enquête de satisfaction pour les enfants">
+    <title>Enquête de Satisfaction - Temps de Vie</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Theme Backgrounds -->
+    <div class="video-container">
+        <div id="defaultVideo" class="background-video"></div>
+        <div id="dbzVideo" class="background-video hidden"></div>
+        <div id="onePieceVideo" class="background-video hidden"></div>
+        <!-- Overlay Container for Additional Gifs -->
+        <div id="overlayVideo" class="background-video overlay hidden"></div>
+    </div>
+
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <form id="surveyForm" novalidate>
+            <!-- Page 1: Introduction -->
+            <section id="page1" class="form-page active" aria-label="Introduction">
+                <div class="intro-header">
+                    <h1>Enquête de satisfaction</h1>
+                    <div class="logo">Temps de Vie</div>
+                </div>
+                <div class="form-group">
+                    <label>Je suis :</label>
+                    <div class="gender-selection">
+                        <div class="radio-button">
+                            <input type="radio" id="gender_girl" name="gender" value="girl">
+                            <label for="gender_girl">Une Fille 👧</label>
+                        </div>
+                        <div class="radio-button">
+                            <input type="radio" id="gender_boy" name="gender" value="boy">
+                            <label for="gender_boy">Un Garçon 👦</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthYear">Année de naissance : (entre 2000 et 2024)</label>
+                    <input type="number" 
+                           id="birthYear" 
+                           name="birthYear" 
+                           min="2000" 
+                           max="2024" 
+                           value="2010"
+                           pattern="\d{4}"
+                           title="Veuillez entrer une année entre 2000 et 2024"
+                           required>
+                </div>
+                <div class="navigation">
+                    <button type="button" class="btn next" onclick="nextPage(1)">Commencer ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 2: Les premiers contacts -->
+            <section id="page2" class="form-page hidden" aria-label="Premiers contacts">
+                <h2>Les premiers contacts avec la Maison d'Enfants 🏠</h2>
+                <div class="form-group">
+                    <label>Est-ce que nous t'avons expliqué pourquoi tu arrivais en Maison d'enfants ?</label>
+                    <div class="satisfaction-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="explication_oui" name="explication_arrivee" value="oui" required>
+                            <label for="explication_oui">Oui 😊</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="explication_non" name="explication_arrivee" value="non">
+                            <label for="explication_non">Non 😕</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>As-tu pris ce que tu en pensais ?</label>
+                    <div class="satisfaction-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="pensee_oui" name="pensee_arrivee" value="oui" required>
+                            <label for="pensee_oui">Oui 😊</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="pensee_non" name="pensee_arrivee" value="non">
+                            <label for="pensee_non">Non 😕</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Comment as-tu été accueilli(e) à ton arrivée ?</label>
+                    <div class="satisfaction-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="accueil_pas_satisfait" name="accueil" value="pas_satisfait" required>
+                            <label for="accueil_pas_satisfait">Pas satisfait 😞</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="accueil_satisfait" name="accueil" value="satisfait">
+                            <label for="accueil_satisfait">Satisfait 🙂</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="accueil_tres_satisfait" name="accueil" value="tres_satisfait">
+                            <label for="accueil_tres_satisfait">Très satisfait 😃</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Te rappelles-tu du jour de ton arrivée ?</label>
+                    <div class="satisfaction-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="souvenir_oui" name="souvenir_arrivee" value="oui" required>
+                            <label for="souvenir_oui">Oui 😊</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="souvenir_non" name="souvenir_arrivee" value="non">
+                            <label for="souvenir_non">Non 😕</label>
+                        </div>
+                    </div>
+                    <textarea name="details_arrivee" placeholder="De quoi te rappelles-tu ?" rows="3"></textarea>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(2)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(2)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 3: La vie quotidienne -->
+            <section id="page3" class="form-page hidden" aria-label="Vie quotidienne">
+                <h2>La vie quotidienne 🏡</h2>
+                <div class="form-group">
+                    <h3>Ton unité de vie</h3>
+                    <table class="satisfaction-table">
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Pas satisfait 😞</th>
+                            <th>Satisfait 🙂</th>
+                            <th>Très satisfait 😃</th>
+                        </tr>
+                        <tr>
+                            <td>L'ambiance</td>
+                            <td><input type="radio" name="ambiance" value="pas_satisfait" required></td>
+                            <td><input type="radio" name="ambiance" value="satisfait"></td>
+                            <td><input type="radio" name="ambiance" value="tres_satisfait"></td>
+                        </tr>
+                        <tr>
+                            <td>Le confort</td>
+                            <td><input type="radio" name="confort" value="pas_satisfait" required></td>
+                            <td><input type="radio" name="confort" value="satisfait"></td>
+                            <td><input type="radio" name="confort" value="tres_satisfait"></td>
+                        </tr>
+                        <tr>
+                            <td>Ta chambre / Ton studio</td>
+                            <td><input type="radio" name="chambre" value="pas_satisfait" required></td>
+                            <td><input type="radio" name="chambre" value="satisfait"></td>
+                            <td><input type="radio" name="chambre" value="tres_satisfait"></td>
+                        </tr>
+                        <tr>
+                            <td>La décoration</td>
+                            <td><input type="radio" name="decoration" value="pas_satisfait" required></td>
+                            <td><input type="radio" name="decoration" value="satisfait"></td>
+                            <td><input type="radio" name="decoration" value="tres_satisfait"></td>
+                        </tr>
+                        <tr>
+                            <td>Le jour de ton anniversaire</td>
+                            <td><input type="radio" name="anniversaire" value="pas_satisfait" required></td>
+                            <td><input type="radio" name="anniversaire" value="satisfait"></td>
+                            <td><input type="radio" name="anniversaire" value="tres_satisfait"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(3)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(3)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 4: Le linge et l'habillement -->
+            <section id="page4" class="form-page hidden" aria-label="Linge et habillement">
+                <h2>Le linge et l'habillement 👕</h2>
+                <div class="form-group">
+                    <label>As-tu assez de linge ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="assez_linge_oui" name="assez_linge" value="oui" required>
+                            <label for="assez_linge_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="assez_linge_non" name="assez_linge" value="non">
+                            <label for="assez_linge_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Participes-tu à l'achat de tes vêtements ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="achat_vetements_oui" name="achat_vetements" value="oui" required>
+                            <label for="achat_vetements_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="achat_vetements_non" name="achat_vetements" value="non">
+                            <label for="achat_vetements_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>As-tu des affaires personnelles ?</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="affaires_perso" value="lit">
+                            Ton espace de lit
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="affaires_perso" value="serviettes">
+                            Tes serviettes et gants de toilette
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="affaires_perso" value="sport">
+                            Tes sacs de sport
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Apprends-tu à :</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="apprentissage" value="machine">
+                            Laver ton linge en machine ?
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="apprentissage" value="repasser">
+                            Repasser ton linge ?
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>D'après toi, que faut-il améliorer ?</label>
+                    <textarea name="amelioration_linge" rows="3" placeholder="Tes suggestions..."></textarea>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(4)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(4)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 5: Les loisirs -->
+            <section id="page5" class="form-page hidden" aria-label="Loisirs">
+                <h2>Les loisirs 🎮</h2>
+                <div class="form-group">
+                    <label>Aimes-tu les sorties avec les éducateurs ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="sorties_educateurs_oui" name="sorties_educateurs" value="oui" required>
+                            <label for="sorties_educateurs_oui">Oui 😊</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="sorties_educateurs_non" name="sorties_educateurs" value="non">
+                            <label for="sorties_educateurs_non">Non 😕</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quelles sorties préfères-tu ?</label>
+                    <textarea name="sorties_preferees" rows="3" placeholder="Tes sorties préférées..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Es-tu déjà allé...</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sorties_passees" value="spectacle">
+                            au spectacle ?
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sorties_passees" value="theatre">
+                            au théâtre ?
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sorties_passees" value="musee">
+                            au musée ?
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sorties_passees" value="concert">
+                            au concert ?
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sorties_passees" value="match">
+                            à un match de foot ?
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Participes-tu à un club ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="club_oui" name="club" value="oui" required>
+                            <label for="club_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="club_non" name="club" value="non">
+                            <label for="club_non">Non 👎</label>
+                        </div>
+                    </div>
+                    <textarea name="club_details" placeholder="Si oui, lequel ?" rows="2"></textarea>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(5)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(5)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 6: Ta scolarité -->
+            <section id="page6" class="form-page hidden" aria-label="Scolarité">
+                <h2>Ta scolarité 📚</h2>
+                <div class="form-group">
+                    <label>Te sens-tu aidé(e) dans :</label>
+                    <table class="satisfaction-table">
+                        <tr>
+                            <td>Pour faire tes devoirs ?</td>
+                            <td>
+                                <div class="yes-no-scale">
+                                    <div class="emoji-radio">
+                                        <input type="radio" id="aide_devoirs_oui" name="aide_devoirs" value="oui" required>
+                                        <label for="aide_devoirs_oui">Oui 👍</label>
+                                    </div>
+                                    <div class="emoji-radio">
+                                        <input type="radio" id="aide_devoirs_non" name="aide_devoirs" value="non">
+                                        <label for="aide_devoirs_non">Non 👎</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Dans ton orientation ?</td>
+                            <td>
+                                <div class="yes-no-scale">
+                                    <div class="emoji-radio">
+                                        <input type="radio" id="aide_orientation_oui" name="aide_orientation" value="oui" required>
+                                        <label for="aide_orientation_oui">Oui 👍</label>
+                                    </div>
+                                    <div class="emoji-radio">
+                                        <input type="radio" id="aide_orientation_non" name="aide_orientation" value="non">
+                                        <label for="aide_orientation_non">Non 👎</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Dans tes recherches de stage ?</td>
+                            <td>
+                                <div class="yes-no-scale">
+                                    <div class="emoji-radio">
+                                        <input type="radio" id="aide_stage_oui" name="aide_stage" value="oui" required>
+                                        <label for="aide_stage_oui">Oui 👍</label>
+                                    </div>
+                                    <div class="emoji-radio">
+                                        <input type="radio" id="aide_stage_non" name="aide_stage" value="non">
+                                        <label for="aide_stage_non">Non 👎</label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-group">
+                    <label>Participes-tu aux sorties ou voyages scolaires ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="sorties_scolaires_oui" name="sorties_scolaires" value="oui" required>
+                            <label for="sorties_scolaires_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="sorties_scolaires_non" name="sorties_scolaires" value="non">
+                            <label for="sorties_scolaires_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(6)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(6)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 7: Ta santé -->
+            <section id="page7" class="form-page hidden" aria-label="Santé">
+                <h2>Ta santé 🏥</h2>
+                <div class="form-group">
+                    <label>Es-tu attentif à ta santé ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="attention_sante_oui" name="attention_sante" value="oui" required>
+                            <label for="attention_sante_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="attention_sante_non" name="attention_sante" value="non">
+                            <label for="attention_sante_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Es-tu aidé(e) pour prendre ton traitement ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="aide_traitement_oui" name="aide_traitement" value="oui" required>
+                            <label for="aide_traitement_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="aide_traitement_non" name="aide_traitement" value="non">
+                            <label for="aide_traitement_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tes parents sont-ils informés quand tu es malade ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="info_parents_sante_oui" name="info_parents_sante" value="oui" required>
+                            <label for="info_parents_sante_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="info_parents_sante_non" name="info_parents_sante" value="non">
+                            <label for="info_parents_sante_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(7)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(7)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 8: Ta famille -->
+            <section id="page8" class="form-page hidden" aria-label="Famille">
+                <h2>Ta famille 👨‍👩‍👧‍👦</h2>
+                <div class="form-group">
+                    <label>Reçois-tu la visite de tes parents à la Maison d'enfants ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="visite_parents_oui" name="visite_parents" value="oui" required>
+                            <label for="visite_parents_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="visite_parents_non" name="visite_parents" value="non">
+                            <label for="visite_parents_non">Non 👎</label>
+                        </div>
+                    </div>
+                    <textarea name="details_visites" placeholder="Si oui, comment ces visites se sont-elles déroulées ?" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Est-ce que tu peux aller voir ta famille au domicile ?</label>
+                    <div class="yes-no-scale">
+                        <div class="emoji-radio">
+                            <input type="radio" id="visite_domicile_oui" name="visite_domicile" value="oui" required>
+                            <label for="visite_domicile_oui">Oui 👍</label>
+                        </div>
+                        <div class="emoji-radio">
+                            <input type="radio" id="visite_domicile_non" name="visite_domicile" value="non">
+                            <label for="visite_domicile_non">Non 👎</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(8)">⬅️ Retour</button>
+                    <button type="button" class="btn next" onclick="nextPage(8)">Suivant ➡️</button>
+                </div>
+            </section>
+
+            <!-- Page 9: L'hygiène -->
+            <section id="page9" class="form-page hidden" aria-label="Hygiène">
+                <h2>L'hygiène 🚿</h2>
+                <div class="form-group">
+                    <label>Te sens-tu accompagné(e) dans ces différentes étapes :</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hygiene_etapes" value="dents">
+                            Brossage des dents 🦷
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hygiene_etapes" value="cheveux">
+                            Brossage des cheveux 💇
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hygiene_etapes" value="douche">
+                            Sensibilisation aux douches 🚿
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hygiene_etapes" value="ongles">
+                            Vigilance Ongles / Oreilles 👂
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="hygiene_etapes" value="vetements">
+                            Tenue vestimentaire 👕
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>D'après toi, que faut-il améliorer ?</label>
+                    <textarea name="amelioration_hygiene" rows="3" placeholder="Tes suggestions..."></textarea>
+                </div>
+
+                <div class="navigation">
+                    <button type="button" class="btn prev" onclick="prevPage(9)">⬅️ Retour</button>
+                    <button type="submit" class="btn submit">Terminer 🎉</button>
+                </div>
+            </section>
+
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="loading-overlay hidden">
+                <div class="loader"></div>
+                <p>Envoi en cours... 🚀</p>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="success-message hidden">
+                <div class="success-content">
+                    <h3>🎉 Merci beaucoup ! 🎉</h3>
+                    <div class="success-animation">
+                        <div class="confetti">🌟</div>
+                        <div class="confetti">✨</div>
+                        <div class="confetti">🎈</div>
+                    </div>
+                    <p class="success-text">Tes réponses ont été enregistrées avec succès !</p>
+                    <p>Ce document sera conservé avec les autres enquêtes recueillies auprès de ceux et celles qui ont quitté la Maison d'enfants avant toi.</p>
+                    <p>Nous tiendrons compte de tes remarques pour améliorer notre accueil et notre accompagnement.</p>
+                    <div class="success-footer">
+                        <span class="emoji-footer">🙏 À bientôt ! 👋</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="enquete.js"></script>
+</body>
+</html>
