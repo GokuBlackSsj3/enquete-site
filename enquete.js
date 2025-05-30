@@ -1,5 +1,3 @@
-// ✅ Fichier enquete.js corrigé avec remerciement final
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('surveyForm');
     const pages = document.querySelectorAll('.form-page');
@@ -175,19 +173,37 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         if (!validatePage(currentPage)) return;
+
         loadingOverlay.classList.remove('hidden');
-        setTimeout(() => {
+
+        const formData = new FormData(form);
+        const data = {};
+
+        formData.forEach((value, key) => {
+            if (data[key]) {
+                if (!Array.isArray(data[key])) data[key] = [data[key]];
+                data[key].push(value);
+            } else {
+                data[key] = value;
+            }
+        });
+
+        fetch("https://script.google.com/macros/s/AKfycbztAB63-cz4XhIrR2NmGYfvuftGs97niC8bim5MWOLlOJeVLy6SssvA61ZUMtHtzbCmnw/exec", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(() => {
             loadingOverlay.classList.add('hidden');
             form.style.display = 'none';
             successMessage.classList.remove('hidden');
-
-            // ✅ Ajout d’un message de remerciement personnalisé
-            const thanks = document.createElement('p');
-            thanks.style.marginTop = '20px';
-            thanks.style.fontSize = '18px';
-            thanks.innerHTML = "<strong>Un grand merci d'avoir pris le temps de remplir cette enquête 🙏💖</strong>";
-            successMessage.querySelector('.success-content').appendChild(thanks);
-        }, 2000);
+        })
+        .catch(err => {
+            alert("Erreur lors de l'envoi du formulaire.");
+            console.error(err);
+        });
     });
 
     function validatePage(pageNum) {
