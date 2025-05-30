@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('surveyForm');
     const pages = document.querySelectorAll('.form-page');
     const progressBar = document.getElementById('progressBar');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const successMessage = document.getElementById('successMessage');
     const overlayVideo = document.getElementById('overlayVideo');
     let currentPage = 1;
     const totalPages = pages.length;
@@ -58,6 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentPageNum === 1) {
             const genderSelected = Array.from(document.querySelectorAll('input[name="gender"]')).some(radio => radio.checked);
             const birthYear = document.getElementById('birthYear').value;
+            const userName = document.getElementById('userName').value.trim();
+
+            if (!userName) {
+                showError(document.getElementById('userName').closest('.form-group'), 'Veuillez entrer votre nom');
+                isValid = false;
+            }
 
             if (!genderSelected) {
                 showError(document.querySelector('input[name="gender"]').closest('.form-group'), 'Veuillez sélectionner votre genre');
@@ -170,71 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         else videos.default.classList.remove('hidden');
     };
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (!validatePage(currentPage)) return;
-
-        loadingOverlay.classList.remove('hidden');
-
-        const formData = new FormData(form);
-        const data = {};
-
-        formData.forEach((value, key) => {
-            if (data[key]) {
-                if (!Array.isArray(data[key])) data[key] = [data[key]];
-                data[key].push(value);
-            } else {
-                data[key] = value;
-            }
-        });
-
-        fetch("https://script.google.com/macros/s/AKfycbztAB63-cz4XhIrR2NmGYfvuftGs97niC8bim5MWOLlOJeVLy6SssvA61ZUMtHtzbCmnw/exec", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(() => {
-            loadingOverlay.classList.add('hidden');
-            form.style.display = 'none';
-            successMessage.classList.remove('hidden');
-        })
-        .catch(err => {
-            alert("Erreur lors de l'envoi du formulaire.");
-            console.error(err);
-        });
-    });
-
-    function validatePage(pageNum) {
-        const currentPageElement = document.getElementById(`page${pageNum}`);
-        const requiredInputs = currentPageElement.querySelectorAll('input[required], textarea[required], select[required]');
-        let isValid = true;
-
-        requiredInputs.forEach(input => {
-            if (input.type === 'radio') {
-                const radioGroup = currentPageElement.querySelectorAll(`input[name="${input.name}"]`);
-                const isChecked = Array.from(radioGroup).some(radio => radio.checked);
-                if (!isChecked) {
-                    isValid = false;
-                    showError(input.closest('.form-group'), 'Veuillez sélectionner une option');
-                }
-            } else if (input.type === 'number') {
-                const value = parseInt(input.value);
-                if (isNaN(value) || value < parseInt(input.min) || value > parseInt(input.max)) {
-                    isValid = false;
-                    showError(input.closest('.form-group'), `Veuillez entrer une année entre ${input.min} et ${input.max}`);
-                }
-            } else {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    showError(input.closest('.form-group'), 'Ce champ est requis');
-                }
-            }
-        });
-
-        return isValid;
-    }
+    // AUCUNE interception de submit ici ! Laisse Formsubmit faire son job
 
     updateProgress();
     updateOverlayVideo(currentPage);
